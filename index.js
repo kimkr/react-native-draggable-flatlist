@@ -85,7 +85,11 @@ class SortableFlatList extends Component {
 
           this._androidStatusBarOffset = (isTranslucent || isHidden) ? StatusBar.currentHeight : 0
         }
-        this._offset.setValue((this._additionalOffset + this._containerOffset - this._androidStatusBarOffset) * -1)
+        if (this.props.scrollingContainerOffset !== undefined) {
+          this._offset.setValue((this._additionalOffset + this._containerOffset - this.props.scrollingContainerOffset - this._androidStatusBarOffset) * -1)
+        } else {
+          this._offset.setValue((this._additionalOffset + this._containerOffset - this._androidStatusBarOffset) * -1)
+        }
         return false
       },
       onMoveShouldSetPanResponder: (evt, gestureState) => {
@@ -118,7 +122,7 @@ class SortableFlatList extends Component {
         const spacerMeasurements = this._measurements[spacerIndex]
         const lastElementMeasurements = this._measurements[data.length - 1]
         if (activeRow === -1) return
-        // If user flings row up and lets go in the middle of an animation measurements can error out. 
+        // If user flings row up and lets go in the middle of an animation measurements can error out.
         // Give layout animations some time to complete and animate element into place before calling onMoveEnd
 
         // Spacers have different positioning depending on whether the spacer row is before or after the active row.
@@ -346,7 +350,7 @@ class SortableFlatList extends Component {
       this.containerView.measure((x, y, width, height, pageX, pageY) => {
         this._containerOffset = horizontal ? pageX : pageY
         this._containerSize = horizontal ? width : height
-      })      
+      })
     }
   }
 
